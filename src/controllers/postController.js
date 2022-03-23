@@ -1,9 +1,8 @@
 import { postRepository } from "../repositories/postRepository.js";
 
 export async function getPosts(req, res) {
-  const { posts } = res.locals;
-
   try {
+    const posts = await postRepository.getPosts();
     res.send(posts);
   } catch (error) {
     console.log(error);
