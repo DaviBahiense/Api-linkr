@@ -13,10 +13,10 @@ async function createPost(userId, description, link) {
 async function getPosts(userId) {
   return connection.query(
     `
-    SELECT * FROM
-    posts WHERE "userId"=$1 
-    ORDER BY id DESC LIMIT 20`,
-    [userId]
+    SELECT users.id AS "userId", users.name, users.img, link, description
+    FROM posts
+    JOIN users ON users.id = posts."userId"
+    ORDER BY posts.id DESC LIMIT 20`
   );
 }
 

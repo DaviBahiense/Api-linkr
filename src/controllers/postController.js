@@ -1,9 +1,21 @@
 import { postRepository } from "../repositories/postRepository.js";
+import urlMetadata from "url-metadata";
 
 export async function getPosts(req, res) {
   try {
-    const posts = await postRepository.getPosts();
-    res.send(posts);
+    const { rows: posts } = await postRepository.getPosts();
+    const postsArray = [];
+
+    for (let i = 0; i < posts.length; i++) {
+      const post = await urlMetadata(posts[i].link);
+      postsArray.push({
+        ...posts[i],
+        metadataImg: post.image,
+        metadataTitle: post.title,
+        metadataDescription: post.description,
+      });
+    }
+    res.send(postsArray);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
