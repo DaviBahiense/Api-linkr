@@ -27,6 +27,7 @@ export async function createPost(req, res) {
   const { link, description } = req.body;
   try {
     await postRepository.createPost(user.id, description, link);
+
     res.sendStatus(201);
   } catch (error) {
     res.sendStatus(500);

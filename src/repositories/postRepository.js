@@ -10,7 +10,7 @@ async function createPost(userId, description, link) {
   );
 }
 
-async function getPosts(userId) {
+async function getPosts() {
   return connection.query(
     `
     SELECT users.id AS "userId", users.name, users.img, link, description
