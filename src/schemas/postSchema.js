@@ -5,4 +5,9 @@ const postSchema = joi.object({
   description: joi.string().allow("").required(),
 });
 
-export default postSchema;
+const updatePostSchema = joi.object({
+  postId: joi.number().required(),
+  description: joi.string().allow("").required(),
+});
+
+export { postSchema, updatePostSchema };
