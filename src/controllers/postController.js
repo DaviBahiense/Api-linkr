@@ -30,8 +30,6 @@ export async function createPost(req, res) {
   const regex = /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm
   const tags = [...new Set(description.match(regex))]
 
-  console.log(tags)
-
   try {
     const post = await postRepository.createPost(user.id, description, link);
     const postId = post.rows[0].id

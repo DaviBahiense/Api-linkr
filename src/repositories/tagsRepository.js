@@ -5,9 +5,12 @@ async function checkTag(tag) {
     `
     SELECT name 
     FROM tag 
-    WHERE name=$1 `,
+    WHERE name=$1`,
     [tag]
   );
+
+  console.log(dbTag.rows[0] === undefined);
+  console.log(tag)
 
   if (dbTag.rows[0] === undefined) {
     await connection.query(
@@ -17,8 +20,6 @@ async function checkTag(tag) {
       [tag]
     );
   }
-
-  console.log("checking tag " + tag)
 }
 
 async function insertPostTag(tag, postId) {
@@ -28,7 +29,8 @@ async function insertPostTag(tag, postId) {
       WHERE name=$1`,
     [tag]
   );
-  const tagId = tagIdQuery.rows[0].id
+  console.log(tagIdQuery.rows)
+  const tagId = tagIdQuery.rows[0]?.id
 
   await connection.query(
     `
@@ -39,7 +41,28 @@ async function insertPostTag(tag, postId) {
   );
 }
 
+async function getPostsFromATag(tag) {
+  return connection.query(
+    `
+    SELECT 
+      users.id AS "userId", 
+      users.name, 
+      users.img ,
+      link, 
+      description
+    FROM posts
+      JOIN users ON users.id = posts."userId"
+      JOIN "postTag" ON "postTag"."postsId" = posts.id
+      JOIN tag ON "postTag"."tagId" = tag.id
+    WHERE tag.name=$1
+    ORDER BY posts.id DESC LIMIT 20
+  `,
+    [tag]
+  )
+}
+
 export const tagsRepository = {
   checkTag,
   insertPostTag,
+  getPostsFromATag
 }
