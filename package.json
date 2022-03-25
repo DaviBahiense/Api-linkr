@@ -1,9 +1,9 @@
 {
-  "name": "Api-linkr",
+  "name": "api-linkr",
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",

@@ -1,13 +1,19 @@
 import { connection } from "../database.js";
 
 async function createPost(userId, description, link) {
-  return connection.query(
+  connection.query(
     `
     INSERT INTO 
     posts ("userId",description, link)
     VALUES ($1,$2,$3)`,
     [userId, description, link]
   );
+
+  return connection.query(`
+  SELECT id FROM posts
+  ORDER BY posts.id DESC
+  LIMIT 1
+  `)
 }
 
 async function getPosts() {
