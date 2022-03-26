@@ -34,3 +34,16 @@ export async function createPost(req, res) {
     console.log(error);
   }
 }
+
+export async function updatePost(req, res) {
+  const { postId, description } = req.body;
+
+  try {
+    await postRepository.updatePost(postId, description);
+
+    res.sendStatus(201);
+  } catch (error) {
+    res.sendStatus(500);
+    console.log(error);
+  }
+}
