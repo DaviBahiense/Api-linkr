@@ -34,10 +34,6 @@ async function updatePost(postId, description) {
 
 export const postRepository = {
   createPost,
-<<<<<<< HEAD
-  getPosts
-=======
   getPosts,
   updatePost,
->>>>>>> main
 };
