@@ -34,8 +34,7 @@ export async function createPost(req, res) {
     const post = await postRepository.createPost(user.id, description, link);
     const postId = post.rows[0].id
 
-    tags.map(async tag => await tagsRepository.checkTag(tag.slice(1)))
-    tags.map(async tag => await tagsRepository.insertPostTag(tag.slice(1), postId))
+    tagsRepository.checkTags(tags, postId)
 
     res.sendStatus(201);
 

@@ -1,44 +1,44 @@
 import { connection } from "../database.js";
 
-async function checkTag(tag) {
-  const dbTag = await connection.query(
-    `
+async function checkTags(tags, postId) {
+  for (let i in tags) {
+    const dbTag = await connection.query(
+      `
     SELECT name 
     FROM tag 
     WHERE name=$1`,
-    [tag]
-  );
+      [tags[i].substr(1)]
+    )
 
-  console.log(dbTag.rows[0] === undefined);
-  console.log(tag)
-
-  if (dbTag.rows[0] === undefined) {
-    await connection.query(
-      `
+    if (dbTag.rows[0] === undefined) {
+      await connection.query(
+        `
         INSERT INTO tag (name) 
         VALUES ($1)`,
-      [tag]
-    );
-  }
-}
+        [tags[i].substr(1)]
+      );
+    }
+  };
 
-async function insertPostTag(tag, postId) {
-  const tagIdQuery = await connection.query(
-    `
+
+  for (let i in tags) {
+    const tagIdQuery = await connection.query(
+      `
       SELECT id FROM tag
       WHERE name=$1`,
-    [tag]
-  );
-  console.log(tagIdQuery.rows)
-  const tagId = tagIdQuery.rows[0]?.id
+      [tags[i].substr(1)]
+    );
 
-  await connection.query(
-    `
+    const tagId = tagIdQuery.rows[0].id
+
+    await connection.query(
+      `
         INSERT INTO 
         "postTag" ("tagId" , "postsId") 
         VALUES ($1 , $2)` ,
-    [tagId, postId]
-  );
+      [tagId, postId]
+    );
+  }
 }
 
 async function getPostsFromATag(tag) {
@@ -62,7 +62,6 @@ async function getPostsFromATag(tag) {
 }
 
 export const tagsRepository = {
-  checkTag,
-  insertPostTag,
+  checkTags,
   getPostsFromATag
 }
