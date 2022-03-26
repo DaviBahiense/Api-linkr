@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getPosts, createPost, handleLike } from "../controllers/postController.js";
+import { getPosts, createPost} from "../controllers/postController.js";
 import { validateTokenMiddleware } from "../middlewares/validateTokenMiddleware.js";
 import { validateSchemaMiddleware } from "../middlewares/validateSchemaMiddleware.js";
 import postSchema from "../schemas/postSchema.js";
@@ -13,6 +13,5 @@ postRouter.post(
   validateSchemaMiddleware(postSchema),
   createPost
 );
-postRouter.post("/posts/:id/:type", validateTokenMiddleware, handleLike)
 
 export default postRouter;
