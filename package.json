@@ -18,7 +18,7 @@
     "nodemon": "^2.0.15"
   },
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node ./src/app.js",
     "dev": "nodemon src/app.js"
   },
   "repository": {
