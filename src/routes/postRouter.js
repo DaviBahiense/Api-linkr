@@ -24,6 +24,6 @@ postRouter.put(
   validateSchemaMiddleware(updatePostSchema),
   updatePost
 );
-postRouter.delete("/post/:id", validateTokenMiddleware, deletePost);
+postRouter.delete("/posts/:id", validateTokenMiddleware, deletePost);
 
 export default postRouter;
