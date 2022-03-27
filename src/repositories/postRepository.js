@@ -32,8 +32,26 @@ async function updatePost(postId, description) {
   );
 }
 
+async function selectPost(id, userId) {
+  return connection.query(
+    `SELECT * FROM posts WHERE id=$1 
+  AND "userId"=$2`,
+    [id, userId]
+  );
+}
+
+async function deletePost(id) {
+  return connection.query(
+    `DELETE FROM posts
+  WHERE id=$1`,
+    [id]
+  );
+}
+
 export const postRepository = {
   createPost,
   getPosts,
   updatePost,
+  selectPost,
+  deletePost,
 };

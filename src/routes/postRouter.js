@@ -3,6 +3,7 @@ import {
   getPosts,
   createPost,
   updatePost,
+  deletePost,
 } from "../controllers/postController.js";
 import { validateTokenMiddleware } from "../middlewares/validateTokenMiddleware.js";
 import { validateSchemaMiddleware } from "../middlewares/validateSchemaMiddleware.js";
@@ -23,5 +24,6 @@ postRouter.put(
   validateSchemaMiddleware(updatePostSchema),
   updatePost
 );
+postRouter.delete("/posts/:id", validateTokenMiddleware, deletePost);
 
 export default postRouter;
