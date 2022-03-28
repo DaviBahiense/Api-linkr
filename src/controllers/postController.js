@@ -43,3 +43,32 @@ export async function createPost(req, res) {
     console.log(error);
   }
 }
+
+export async function updatePost(req, res) {
+  const { postId, description } = req.body;
+
+  try {
+    await postRepository.updatePost(postId, description);
+
+    res.sendStatus(201);
+  } catch (error) {
+    res.sendStatus(500);
+    console.log(error);
+  }
+}
+
+export async function deletePost(req, res) {
+  let { id } = req.params;
+
+  try {
+    const result = await postRepository.selectPost(id, res.locals.user.id);
+    if (result.rowCount === 0) {
+      return res.sendStatus(401);
+    }
+    await postRepository.deletePost(id);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
