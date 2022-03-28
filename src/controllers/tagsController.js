@@ -17,10 +17,19 @@ export async function getPostsFromATag(req, res) {
         metadataDescription: post.description,
       });
     }
-    console.log(postsArray)
+
     res.send(postsArray);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
+  }
+}
+
+export async function getTrendingTags(req, res) {
+  try {
+    const tags = await tagsRepository.getTrendingTags()
+    res.send(tags.rows)
+  } catch (error) {
+    console.log(error.message)
   }
 }

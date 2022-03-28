@@ -9,7 +9,7 @@ const router = Router();
 router.use(authRouter);
 router.use(userRouter);
 router.use(postRouter);
-router.use(tagsRouter);
 router.use(likeRouter);
+router.use(tagsRouter);
 
 export default router;

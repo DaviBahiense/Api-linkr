@@ -62,7 +62,25 @@ async function getPostsFromATag(tag) {
   return query
 }
 
+async function getTrendingTags() {
+  const query = await connection.query(
+    `
+      SELECT
+        tag.name AS tag,
+        COUNT("postTag"."tagId") AS "tagCount"
+      FROM tag
+        JOIN "postTag" ON "postTag"."tagId" = tag.id
+      GROUP BY tag.name
+      ORDER BY "tagCount" DESC
+        LIMIT 10
+    `
+  )
+
+  return query;
+}
+
 export const tagsRepository = {
   checkTags,
-  getPostsFromATag
+  getPostsFromATag,
+  getTrendingTags
 }
