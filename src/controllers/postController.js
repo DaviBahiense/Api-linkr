@@ -1,4 +1,5 @@
 import { postRepository } from "../repositories/postRepository.js";
+import { tagsRepository } from "../repositories/tagsRepository.js";
 import urlMetadata from "url-metadata";
 
 export async function getPosts(req, res) {
@@ -25,10 +26,18 @@ export async function getPosts(req, res) {
 export async function createPost(req, res) {
   const { user } = res.locals;
   const { link, description } = req.body;
+
+  const regex = /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm
+  const tags = [...new Set(description.match(regex))]
+
   try {
-    await postRepository.createPost(user.id, description, link);
+    const post = await postRepository.createPost(user.id, description, link);
+    const postId = post.rows[0].id
+
+    tagsRepository.checkTags(tags, postId)
 
     res.sendStatus(201);
+
   } catch (error) {
     res.sendStatus(500);
     console.log(error);
