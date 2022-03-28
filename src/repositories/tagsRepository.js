@@ -42,7 +42,7 @@ async function checkTags(tags, postId) {
 }
 
 async function getPostsFromATag(tag) {
-  return connection.query(
+  const query = await connection.query(
     `
     SELECT 
       users.id AS "userId", 
@@ -59,6 +59,7 @@ async function getPostsFromATag(tag) {
   `,
     [tag]
   )
+  return query
 }
 
 export const tagsRepository = {

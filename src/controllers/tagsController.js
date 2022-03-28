@@ -17,6 +17,7 @@ export async function getPostsFromATag(req, res) {
         metadataDescription: post.description,
       });
     }
+    console.log(postsArray)
     res.send(postsArray);
   } catch (error) {
     console.log(error);
