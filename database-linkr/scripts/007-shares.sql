@@ -1,5 +1,5 @@
-CREATE TABLE "postTag" (
+CREATE TABLE "shares" (
 	"id" serial NOT NULL PRIMARY KEY,
-	"tagId" integer NOT NULL REFERENCES tag(id),
+	"userId" integer NOT NULL REFERENCES users(id),
 	"postId" integer NOT NULL REFERENCES posts(id) ON DELETE CASCADE
 );
