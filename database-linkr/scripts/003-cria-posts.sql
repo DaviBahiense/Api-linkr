@@ -3,7 +3,7 @@ CREATE TABLE "posts" (
 	"link" TEXT NOT NULL,
 	"description" TEXT,
 	"userId" integer NOT NULL REFERENCES users(id),
-	"metadataImg" TEXT,
-	"metadataDescription" TEXT,
-	"metadataTitle" TEXT
+	"metadataImg" TEXT NOT NULL,
+	"metadataDescription" TEXT NOT NULL,
+	"metadataTitle" TEXT NOT NULL
 );

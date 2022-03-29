@@ -1,12 +1,12 @@
 import { connection } from "../database.js";
 
-async function createPost(userId, description, link) {
+async function createPost(userId, description, link, metadataImg, metadataTitle, metadataDescription) {
   await connection.query(
     `
     INSERT INTO 
-    posts ("userId",description, link)
-    VALUES ($1,$2,$3)`,
-    [userId, description, link]
+    posts ("userId",description, link, "metadataImg", "metadataDescription", "metadataTitle")
+    VALUES ($1,$2,$3,$4,$5,$6)`,
+    [userId, description, link, metadataImg, metadataTitle, metadataDescription]
   );
 
   return connection.query(`
@@ -19,7 +19,16 @@ async function createPost(userId, description, link) {
 async function getPosts() {
   return connection.query(
     `
-    SELECT posts.id as "postId", users.id AS "userId", users.name, users.img, link, description
+    SELECT 
+      posts.id as "postId", 
+      users.id AS "userId", 
+      users.name, 
+      users.img, 
+      link, 
+      description,
+      "metadataImg",
+      "metadataDescription",
+      "metadataTitle"
     FROM posts
       JOIN users ON users.id = posts."userId"
     ORDER BY posts.id DESC LIMIT 20`

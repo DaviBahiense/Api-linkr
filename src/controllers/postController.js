@@ -5,18 +5,8 @@ import urlMetadata from "url-metadata";
 export async function getPosts(req, res) {
   try {
     const { rows: posts } = await postRepository.getPosts();
-    const postsArray = [];
 
-    for (let i = 0; i < posts.length; i++) {
-      const post = await urlMetadata(posts[i].link);
-      postsArray.push({
-        ...posts[i],
-        metadataImg: post.image,
-        metadataTitle: post.title,
-        metadataDescription: post.description,
-      });
-    }
-    res.send(postsArray);
+    res.send(posts);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -27,11 +17,21 @@ export async function createPost(req, res) {
   const { user } = res.locals;
   const { link, description } = req.body;
 
+  const metadata = await urlMetadata(link)
+
   const regex = /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm
   const tags = [...new Set(description.match(regex))]
 
   try {
-    const post = await postRepository.createPost(user.id, description, link);
+    const post = await postRepository.createPost(
+      user.id,
+      description,
+      link,
+      metadata.image,
+      metadata.title,
+      metadata.description
+    );
+
     const postId = post.rows[0].id
 
     tagsRepository.checkTags(tags, postId)
