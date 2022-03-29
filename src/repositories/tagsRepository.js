@@ -68,7 +68,7 @@ async function getTrendingTags() {
       SELECT
         tags.name AS tag,
         COUNT("postsTags"."tagId") AS "tagCount"
-      FROM tag
+      FROM tags
         JOIN "postsTags" ON "postsTags"."tagId" = tags.id
       GROUP BY tags.name
       ORDER BY "tagCount" DESC
