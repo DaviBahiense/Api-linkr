@@ -5,7 +5,7 @@ async function checkTags(tags, postId) {
     const dbTag = await connection.query(
       `
     SELECT name 
-    FROM tag 
+    FROM tags 
     WHERE name=$1`,
       [tags[i].substr(1)]
     )
@@ -13,7 +13,7 @@ async function checkTags(tags, postId) {
     if (dbTag.rows[0] === undefined) {
       await connection.query(
         `
-        INSERT INTO tag (name) 
+        INSERT INTO tags (name) 
         VALUES ($1)`,
         [tags[i].substr(1)]
       );
@@ -24,7 +24,7 @@ async function checkTags(tags, postId) {
   for (let i in tags) {
     const tagIdQuery = await connection.query(
       `
-      SELECT id FROM tag
+      SELECT id FROM tags
       WHERE name=$1`,
       [tags[i].substr(1)]
     );
@@ -34,7 +34,7 @@ async function checkTags(tags, postId) {
     await connection.query(
       `
         INSERT INTO 
-        "postTag" ("tagId" , "postsId") 
+        "postsTags" ("tagId" , "postId") 
         VALUES ($1 , $2)` ,
       [tagId, postId]
     );
@@ -52,9 +52,9 @@ async function getPostsFromATag(tag) {
       description
     FROM posts
       JOIN users ON users.id = posts."userId"
-      JOIN "postTag" ON "postTag"."postsId" = posts.id
-      JOIN tag ON "postTag"."tagId" = tag.id
-    WHERE tag.name=$1
+      JOIN "postsTags" ON "postsTags"."postId" = posts.id
+      JOIN tags ON "postsTags"."tagId" = tags.id
+    WHERE tags.name=$1
     ORDER BY posts.id DESC LIMIT 20
   `,
     [tag]
@@ -66,11 +66,11 @@ async function getTrendingTags() {
   const query = await connection.query(
     `
       SELECT
-        tag.name AS tag,
-        COUNT("postTag"."tagId") AS "tagCount"
+        tags.name AS tag,
+        COUNT("postsTags"."tagId") AS "tagCount"
       FROM tag
-        JOIN "postTag" ON "postTag"."tagId" = tag.id
-      GROUP BY tag.name
+        JOIN "postsTags" ON "postsTags"."tagId" = tags.id
+      GROUP BY tags.name
       ORDER BY "tagCount" DESC
         LIMIT 10
     `
