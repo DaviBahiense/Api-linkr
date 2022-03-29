@@ -4,14 +4,15 @@ export async function handleLike(req, res) {
     const { id, type } = req.params;
     const { user } = res.locals;
     try {
+
         const likeExistence = await likeRepository.checkLikeExistence(user.id, id);
 
         if (type === "like" && likeExistence.rowCount === 0) {
-        await likeRepository.like(user.id, id);
+            await likeRepository.like(user.id, id);
         } else if (type === "unlike" && likeExistence.rowCount > 0) {
-        await likeRepository.unlike(user.id, id);
+            await likeRepository.unlike(user.id, id);
         } else {
-        return res.sendStatus(422);
+            return res.sendStatus(422);
         }
         res.sendStatus(200);
     } catch (error) {
