@@ -10,7 +10,19 @@ async function create(body) {
     [body.userId, body.postId, body.comment]
   );
 }
+async function get(postId) {
+  return connection.query(
+    `
+      SELECT comments.*, users.img, users.name 
+      FROM comments 
+      JOIN users ON comments."userId"=users.id
+      WHERE "postId"=$1 
+    `,
+    [postId]
+  );
+}
 
 export const commentRepository = {
   create,
+  get,
 };
