@@ -19,7 +19,7 @@ export async function createPost(req, res) {
 
   const metadata = await urlMetadata(link)
 
-  const regex = /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm
+  const regex = /([#|＃][^\s]+)/g
   const tags = [...new Set(description.match(regex))]
 
   try {
