@@ -8,8 +8,8 @@ export async function getPostsFromATag(req, res) {
 
     res.send(posts);
   } catch (error) {
-    console.log(error);
-    return res.sendStatus(500);
+
+    return res.status(500).send(error.message);
   }
 }
 
@@ -18,6 +18,7 @@ export async function getTrendingTags(req, res) {
     const tags = await tagsRepository.getTrendingTags()
     res.send(tags.rows)
   } catch (error) {
-    console.log(error.message)
+
+    return res.status(500).send(error.message);
   }
 }
