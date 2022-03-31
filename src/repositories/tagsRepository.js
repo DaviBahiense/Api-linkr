@@ -45,11 +45,15 @@ async function getPostsFromATag(tag) {
   const query = await connection.query(
     `
     SELECT 
+      posts.id as "postId", 
       users.id AS "userId", 
       users.name, 
-      users.img ,
+      users.img, 
       link, 
-      description
+      description,
+      "metadataImg",
+      "metadataDescription",
+      "metadataTitle"
     FROM posts
       JOIN users ON users.id = posts."userId"
       JOIN "postsTags" ON "postsTags"."postId" = posts.id
