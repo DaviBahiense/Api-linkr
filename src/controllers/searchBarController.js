@@ -12,3 +12,16 @@ export async function searchUsers(req, res) {
     res.status(500).send(error)
   }
 }
+
+export async function verifyFollow(req, res) {
+  const { userId } = req.params
+  const { followerId } = req.params
+
+  try {
+    const verification = await searchBarRepository.verifyFollow(userId, followerId)
+    res.send(verification.rows[0]?.followId.toString())
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+}
