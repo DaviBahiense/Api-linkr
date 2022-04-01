@@ -4,6 +4,7 @@ CREATE TABLE "posts" (
 	"description" TEXT,
 	"time" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
 	"userId" integer NOT NULL REFERENCES users(id),
+	"time" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
 	"metadataImg" TEXT NOT NULL,
 	"metadataDescription" TEXT NOT NULL,
 	"metadataTitle" TEXT NOT NULL

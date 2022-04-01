@@ -19,10 +19,10 @@ export async function createPost(req, res) {
   const { user } = res.locals;
   const { link, description } = req.body;
 
-  const metadata = await urlMetadata(link)
+  const metadata = await urlMetadata(link);
 
-  const regex = /\B(\#[a-zA-Z0-9]+\b)(?!;)/gm
-  const tags = [...new Set(description.match(regex))]
+  const regex = /([#|＃][^\s]+)/g;
+  const tags = [...new Set(description.match(regex))];
 
   try {
     const post = await postRepository.createPost(
@@ -34,12 +34,11 @@ export async function createPost(req, res) {
       metadata.description
     );
 
-    const postId = post.rows[0].id
+    const postId = post.rows[0].id;
 
-    tagsRepository.checkTags(tags, postId)
+    tagsRepository.checkTags(tags, postId);
 
     res.sendStatus(201);
-
   } catch (error) {
     res.sendStatus(500);
     console.log(error);
