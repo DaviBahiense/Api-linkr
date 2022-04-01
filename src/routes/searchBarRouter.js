@@ -5,6 +5,6 @@ import { validateTokenMiddleware } from "../middlewares/validateTokenMiddleware.
 const searchBarRouter = Router();
 
 searchBarRouter.get("/search/:name", validateTokenMiddleware, searchUsers);
-searchBarRouter.post("/search/verifyFollow/:userId", validateTokenMiddleware, verifyFollow)
+searchBarRouter.get("/search/verifyFollow/:followerId/:userId", validateTokenMiddleware, verifyFollow);
 
 export default searchBarRouter;
