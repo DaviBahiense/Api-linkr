@@ -6,6 +6,8 @@ export async function getPosts(req, res) {
   try {
     const { rows: posts } = await postRepository.getPosts();
 
+    posts.sort((a, b) => b.time - a.time)
+
     res.send(posts);
   } catch (error) {
     console.log(error);

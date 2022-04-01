@@ -6,6 +6,7 @@ import tagsRouter from "./tagsRouter.js";
 import likeRouter from "./likeRouter.js";
 import searchBarRouter from "./searchBarRouter.js";
 import followRouter from "./followRouter.js";
+import repostRouter from "./repostRouter.js";
 
 const router = Router();
 router.use(authRouter);
@@ -13,7 +14,8 @@ router.use(userRouter);
 router.use(postRouter);
 router.use(likeRouter);
 router.use(tagsRouter);
-router.use(searchBarRouter)
-router.use(followRouter)
+router.use(searchBarRouter);
+router.use(followRouter);
+router.use(repostRouter);
 
 export default router;
