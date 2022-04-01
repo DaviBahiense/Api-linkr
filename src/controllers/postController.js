@@ -5,8 +5,37 @@ import urlMetadata from "url-metadata";
 export async function getPosts(req, res) {
   try {
     const { rows: posts } = await postRepository.getPosts();
+    const { lastIndex } = req.query;
 
-    res.send(posts);
+    //res.send(posts);
+
+    const totalPosts = [...posts.rows];
+
+    const orderedPosts = totalPosts.sort(function (a, b) {
+      if (a.time < b.time) {
+        return 1;
+      }
+      if (a.time > b.time) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // const post = orderedPosts.filter((post) =>
+    //   !post.userRepostId
+    //     ? followings.includes(post.userId) || post.userId === userId
+    //     : followings.includes(post.userRepostId) || post.userRepostId === userId
+    // );
+
+    const post = orderedPosts;
+    const lastIdPosts = post[post.length - 1]?.id;
+    const limitPosts = post.splice(lastIndex, 10);
+    const lastIdLimitPosts = limitPosts[limitPosts.length - 1]?.id;
+
+    const compare = lastIdPosts === lastIdLimitPosts;
+    const hasMore = compare ? false : true;
+
+    res.send({ limitPosts, hasMore });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
