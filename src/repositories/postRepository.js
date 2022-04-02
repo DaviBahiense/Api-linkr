@@ -1,6 +1,13 @@
 import { connection } from "../database.js";
 
-async function createPost(userId, description, link, metadataImg, metadataTitle, metadataDescription) {
+async function createPost(
+  userId,
+  description,
+  link,
+  metadataImg,
+  metadataTitle,
+  metadataDescription
+) {
   await connection.query(
     `
     INSERT INTO 
@@ -13,11 +20,12 @@ async function createPost(userId, description, link, metadataImg, metadataTitle,
   SELECT id FROM posts
   ORDER BY posts.id DESC
   LIMIT 1
-  `)
+  `);
 }
 
-async function getPosts() {
-  return connection.query(`
+async function getPosts(limit) {
+  return connection.query(
+    `
     SELECT
       s."userId" AS "reposterById",
       reposter.name AS "reposterByName",
@@ -59,6 +67,29 @@ async function getPosts() {
       FROM posts p
       JOIN users u
         ON u.id = p."userId"
+        ORDER BY p.id DESC LIMIT $1
+        `,
+    [limit]
+  );
+}
+
+async function countPosts() {
+  return await connection.query(`
+    SELECT COUNT(*) as "countPosts"
+      FROM (
+        SELECT 
+      posts.id as "postId", 
+      users.id AS "userId", 
+      users.name, 
+      users.img, 
+      link, 
+      description,
+      "metadataImg",
+      "metadataDescription",
+      "metadataTitle"
+    FROM posts
+      JOIN users ON users.id = posts."userId" 
+      ) as "salve"
   `);
 }
 
@@ -96,4 +127,5 @@ export const postRepository = {
   updatePost,
   selectPost,
   deletePost,
+  countPosts,
 };

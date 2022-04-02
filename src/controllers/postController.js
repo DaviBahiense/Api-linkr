@@ -3,15 +3,27 @@ import { tagsRepository } from "../repositories/tagsRepository.js";
 import urlMetadata from "url-metadata";
 
 export async function getPosts(req, res) {
+  const { limit } = req.query;
+  console.log(limit);
+
   try {
-    const { rows: posts } = await postRepository.getPosts();
+    const { rows: posts } = await postRepository.getPosts(limit);
+    const {
+      rows: [{ countPosts }],
+    } = await postRepository.countPosts();
+    const count = parseInt(countPosts);
 
-    posts.sort((a, b) => b.time - a.time)
-
-    res.send(posts);
+    const postsResponse = [];
+    for (const post of posts) {
+      postsResponse.push({
+        ...post,
+        countPosts: count,
+      });
+    }
+    res.send(postsResponse);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(500);
+    res.sendStatus(500);
   }
 }
 
