@@ -2,16 +2,29 @@ import { postRepository } from "../repositories/postRepository.js";
 import { tagsRepository } from "../repositories/tagsRepository.js";
 import urlMetadata from "url-metadata";
 
-export async function getPosts(req, res) {
-  try {
-    const { rows: posts } = await postRepository.getPosts();
+// export async function getPosts(req, res) {
+//   const { limit } = req.query;
 
-    res.send(posts);
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(500);
-  }
-}
+//   try {
+//     const { rows: posts } = await postRepository.getPosts(limit);
+//     const {
+//       rows: [{ countPosts }],
+//     } = await postRepository.countPosts();
+
+//     const postsResponse = [];
+
+//     for (const post of posts) {
+//       postsResponse.push({
+//         ...post,
+//         countPosts: count,
+//       });
+//     }
+//     res.send(postsResponse);
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(500);
+//   }
+// }
 
 export async function createPost(req, res) {
   const { user } = res.locals;
@@ -69,5 +82,23 @@ export async function deletePost(req, res) {
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
+  }
+}
+
+export async function getPosts(request, response) {
+  //console.log("banana");
+  try {
+    const offset = request.query.offset;
+    //console.log(offset);
+
+    const posts = await postRepository.getPosts(offset);
+    console.log(posts);
+
+    const post = [];
+
+    response.send(posts);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(500);
   }
 }

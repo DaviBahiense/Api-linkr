@@ -12,6 +12,7 @@ import { postSchema, updatePostSchema } from "../schemas/postSchema.js";
 const postRouter = Router();
 
 postRouter.get("/posts", validateTokenMiddleware, getPosts);
+
 postRouter.post(
   "/posts",
   validateTokenMiddleware,

@@ -1,6 +1,13 @@
 import { connection } from "../database.js";
 
-async function createPost(userId, description, link, metadataImg, metadataTitle, metadataDescription) {
+async function createPost(
+  userId,
+  description,
+  link,
+  metadataImg,
+  metadataTitle,
+  metadataDescription
+) {
   await connection.query(
     `
     INSERT INTO 
@@ -13,13 +20,42 @@ async function createPost(userId, description, link, metadataImg, metadataTitle,
   SELECT id FROM posts
   ORDER BY posts.id DESC
   LIMIT 1
-  `)
+  `);
 }
 
-async function getPosts() {
-  return connection.query(
+async function getPosts(offset) {
+  let offsetQuery = "";
+
+  if (offset && typeof parseInt(offset) === "number") {
+    offsetQuery = `OFFSET ${offset}`;
+  }
+  console.log(offsetQuery);
+  const result = await connection.query(
+    `SELECT 
+    posts.id as "postId", 
+    users.id AS "userId", 
+    users.name, 
+    users.img, 
+    link, 
+    description,
+    "metadataImg",
+    "metadataDescription",
+    "metadataTitle"
+  FROM posts
+    LEFT JOIN users ON users.id = posts."userId"
+  ORDER BY posts.id DESC
+  LIMIT 10 ${offsetQuery}
     `
-    SELECT 
+  );
+  console.log(result);
+  return result.rows;
+}
+
+async function countPosts() {
+  return await connection.query(`
+    SELECT COUNT(*) as "countPosts"
+      FROM (
+        SELECT 
       posts.id as "postId", 
       users.id AS "userId", 
       users.name, 
@@ -30,9 +66,9 @@ async function getPosts() {
       "metadataDescription",
       "metadataTitle"
     FROM posts
-      JOIN users ON users.id = posts."userId"
-    ORDER BY posts.id DESC LIMIT 20`
-  );
+      JOIN users ON users.id = posts."userId" 
+      ) as "salve"
+  `);
 }
 
 async function updatePost(postId, description) {
@@ -69,4 +105,5 @@ export const postRepository = {
   updatePost,
   selectPost,
   deletePost,
+  countPosts,
 };

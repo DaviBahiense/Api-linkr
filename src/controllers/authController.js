@@ -24,7 +24,6 @@ export async function singUp(req, res) {
 
 export async function login(req, res) {
   const { email, password } = req.body;
-
   const { rows: users } = await urlsRepository.checkExist(email);
   const [user] = users;
   if (!user) {
